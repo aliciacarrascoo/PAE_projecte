@@ -20,8 +20,11 @@ uint32_t indice;
 int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
-    //Primero de todo, le pasamos al simulador el puntero a la habitacion:
+    //Primero de tot, le pasamos al simulador el puntero a la habitacion:
     //init_world();
+
+    // Per a no haver de fer fflush rere cada print
+    setbuf(stdout, NULL);
 
     //Init queue for TX/RX data
     init_queue(&q_tx);
@@ -52,6 +55,8 @@ int main(void) {
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);//	return 0;
+
+    trobar_pared_propera();
 
     while (estado != Quit) {
         if (simulator_finished) {

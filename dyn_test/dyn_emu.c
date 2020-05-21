@@ -156,7 +156,7 @@ void decode_and_build_reply(instr_pck_header_t rx_header,
             break;
         case DYN_INSTR__WRITE:
             memcpy(&dyn_mem[rx_header.id - 1][rx_buff[0]], &rx_buff[1],
-                   rx_header.len - 2);
+                   rx_header.len - 3);
             tx_header->len = 2;
             break;
         default:
@@ -227,6 +227,9 @@ void *dyn_emu(void *vargp) {
         switch (fsm_state) {
             case FSM_RX__HEADER_1:
 //			printf("\n Waiting for new packet\n");
+                tmp = recv_byte();
+                assert(tmp == 0xFF);
+                break;
             case FSM_RX__HEADER_2:
                 tmp = recv_byte();
                 assert(tmp == 0xFF);
@@ -264,10 +267,16 @@ void *dyn_emu(void *vargp) {
                 break;
             case FSM_TX__HEADER_1:
                 printf("\n Sending reply\n");
-            case FSM_TX__HEADER_2:
-            case FSM_TX__ID:
-            case FSM_TX__LEN:
                 tx_byte(*(((uint8_t *) &tx_header) + i++));
+                break;
+            case FSM_TX__HEADER_2:
+                tx_byte(*(((uint8_t *) &tx_header) + i++));
+                break;
+            case FSM_TX__ID:
+                tx_byte(tx_header.id);
+                break;
+            case FSM_TX__LEN:
+                tx_byte(tx_header.len);
                 break;
             case FSM_TX__ERR:
                 tx_byte(tx_header.err);

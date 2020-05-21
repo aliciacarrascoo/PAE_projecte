@@ -17,12 +17,18 @@ typedef enum _dyn_instr_type {
 } DYN_INSTR_t;
 
 typedef enum _dyn_reg_type {
+    DYN_REG_CW_ANGLE_LIMIT_L = 0x06,
+    DYN_REG_CW_ANGLE_LIMIT_H = 0x07,
+    DYN_REG_CCW_ANGLE_LIMIT_L = 0x08,
+    DYN_REG_CCW_ANGLE_LIMIT_H = 0x09,
     DYN_REG__LED = 0x19,
-    DYN_REG__IR_LEFT = 0x1A,
-    DYN_REG__IR_CENTER = 0x1B,
-    DYN_REG__IR_RIGHT = 0x1C,
-    DYN_REG__GOAL_SPEED_L = 0x20,
-    DYN_REG__GOAL_SPEED_H = 0x21,
+    DYN_LEFT_IR_DATA = 0x1A,
+    DYN_CENTER_IR_DATA = 0x1B,
+    DYN_RIGHT_IR_DATA = 0x1C,
+    DYN_REG_GOAL_SPEED_L = 0x1E,
+    DYN_REG_GOAL_SPEED_H  = 0x1F,
+    DYN_REG_MOV_SPEED_L = 0x20,
+    DYN_REG_MOV_SPEED_H = 0x21,
     DYN_REG__MAX = 0x32,
 } DYN_REG_t;
 

@@ -33,4 +33,4 @@ add_executable(p4_pc_joystick2_habitacion
         main.c
         main.h
         posicion.c
-        posicion.h)
+        posicion.h dyn/dyn_app_motors.h dyn/dyn_app_motors.c)

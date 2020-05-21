@@ -12,6 +12,8 @@
 #include <stdio.h>
 
 #include "dyn/dyn_instr.h"
+#include "dyn_app_sensor.h"
+#include "dyn_app_motors.h"
 
 /**
  * Turn on or off the LED of a given dynamixel module
@@ -32,4 +34,26 @@ int dyn_led_control(uint8_t id, bool val) {
  */
 int dyn_led_read(uint8_t id, uint8_t *val) {
     return dyn_read_byte(id, DYN_REG__LED, val);
+}
+
+uint8_t trobar_pared_propera() {
+    uint8_t dreta, esquerra, davant;
+    dreta = distancia_dreta();
+    esquerra = distancia_esquerra();
+    davant = distancia_frontal();
+    //
+    if (davant > esquerra) {
+        // Prendrà com a fita superior la captada pel sensor esquerra
+        if (dreta > esquerra) {
+            // NO SABEM QUANT ÉS 90 GRAUS
+            // Va rotant sobre si mateix fins que s'encara amb una paret més propera o igual a la que havia detectat com
+            // a més aprop, no només mirem les 3 direccions base
+            while(esquerra < distancia_frontal()) {
+                tirabuixo();
+            }
+
+        } else { // Prendrà com a fita superior la captada pel sensor dret
+
+        }
+    }
 }

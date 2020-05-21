@@ -28,7 +28,9 @@ int dyn_write_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t reg_write_val)
     parameters[0] = reg_addr;
     parameters[1] = reg_write_val;
     reply = RxTxPacket(module_id, 2, DYN_INSTR__WRITE, parameters);
-    return (reply.tx_err < 1) | reply.time_out;
+
+    // Retorna 1 si ha hagut algun error o s'ha esgotat el temps
+    return !(reply.tx_err < 1) | reply.time_out;
 }
 
 /**
@@ -51,7 +53,7 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
     reply = RxTxPacket(module_id, 2, DYN_INSTR__READ, parameters);
     *reg_read_val = reply.StatusPacket[5];
 
-    return (reply.tx_err < 1) | reply.time_out;
+    return !(reply.tx_err < 1) | reply.time_out;
 }
 
 /**
@@ -67,7 +69,21 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
  * @return Error code to be treated at higher levels.
  */
 int dyn_write(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {
-    //TODO: If required, implement multiposition write
-    return 255;
+    uint8_t i;
+    bool err = false;
+    for (i = 0; i < len; i++) {
+        if (dyn_write_byte(module_id, reg_addr + i, val[i])) err = true;
+    }
+    return err;
+}
+
+int dyn_read(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {
+    uint8_t i;
+    bool err = false;
+    for (i = 0; i < len; i++) {
+        // TODO: cal &???
+        if (dyn_read_byte(module_id, reg_addr + i, &val[i])) err = true;
+    }
+    return err;
 }
 

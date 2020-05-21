@@ -83,8 +83,16 @@ struct RxReturn RxPacket(void) {
             f_rx_uart_byte(&respuesta);
         } //fin del for
     }
-    //TODO: Decode packet and verify checksum
-
+    byte bCheckSum = 0;
+    if (!respuesta.time_out) { // Si no s'ha esgotat el time out d'aquesta instrucció durant la recepció
+        byte bLenght = respuesta.StatusPacket[3] + 3;
+        for (bCount = 2; bCount < bLenght; bCount++) {
+            bCheckSum += respuesta.StatusPacket[bCount];
+        }
+        bCheckSum = ~bCheckSum;
+        // Si no coincideixen els CheckSums activem l'error
+        if (respuesta.StatusPacket[bLenght] != bCheckSum) respuesta.tx_err = true;
+    }
     return respuesta;
 }
 
