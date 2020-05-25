@@ -44,7 +44,7 @@ uint8_t trobar_pared_propera() {
     //
     if (davant > esquerra) {
         // Prendrà com a fita superior la captada pel sensor esquerra
-        if (dreta > esquerra) {
+        if (dreta > esquerra) { // esquerra la més propera (fita superior)
             // NO SABEM QUANT ÉS 90 GRAUS
             // Va rotant sobre si mateix fins que s'encara amb una paret més propera o igual a la que havia detectat com
             // a més aprop, no només mirem les 3 direccions base
@@ -53,7 +53,15 @@ uint8_t trobar_pared_propera() {
             }
 
         } else { // Prendrà com a fita superior la captada pel sensor dret
-
+            while(dreta < distancia_frontal()) {
+                tirabuixo();
+            }
         }
+    }
+    while (distancia_frontal() > 5) {
+        moure_endavant(); //TODO: Passar-li per paràmetre velocitat
+    }
+    while (distancia_dreta() > 5) { // Es mou mentre gira??
+        tirabuixo();
     }
 }
