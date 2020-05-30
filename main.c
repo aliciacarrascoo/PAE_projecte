@@ -56,7 +56,7 @@ int main(void) {
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);//	return 0;
 
-    trobar_pared_propera();
+    trobar_paret_propera();
 
     while (estado != Quit) {
         if (simulator_finished) {
