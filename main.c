@@ -36,29 +36,19 @@ int main(void) {
     pthread_create(&tid, NULL, dyn_emu, (void *) datos_habitacion);
     pthread_create(&jid, NULL, joystick_emu, (void *) &jid);
 
-    //Testing some high level function
-    printf("\nSetting LED to 0 \n");
-    dyn_led_control(1, 0);
-    printf("\nGetting LED value \n");
-    dyn_led_read(1, &tmp);
-    assert(tmp == 0);
-    printf("\nSetting LED to 1 \n");
-    dyn_led_control(1, 1);
-    printf("\nGetting LED value \n");
-    dyn_led_read(1, &tmp);
-    assert(tmp == 1);
-
-
-    printf("\n************************\n");
-    printf("Test passed successfully\n");
-
     printf("\nDimensiones habitacion %d ancho x %d largo mm2\n", ANCHO, LARGO);
     printf("En memoria: %I64u B = %I64u MiB\n", sizeof(datos_habitacion), sizeof(datos_habitacion) >> 20);
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
-    fflush(stdout);//	return 0;
+    fflush(stdout);
+    accelerar();
+    pthread_kill(tid, SIGTERM);
+    pthread_kill(jid, SIGTERM);
+    printf("Programa terminado\n");
+    fflush(stdout);
+    return 0;
 
-    trobar_paret_propera();
+    //moure_endavant();
 
     while (estado != Quit) {
         if (simulator_finished) {

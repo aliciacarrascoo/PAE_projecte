@@ -30,7 +30,7 @@ int dyn_write_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t reg_write_val)
     reply = RxTxPacket(module_id, 2, DYN_INSTR__WRITE, parameters);
 
     // Retorna 1 si ha hagut algun error o s'ha esgotat el temps
-    return !(reply.tx_err < 1) | reply.time_out;
+    return (reply.tx_err << 1) | reply.time_out;
 }
 
 /**
@@ -53,7 +53,7 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
     reply = RxTxPacket(module_id, 2, DYN_INSTR__READ, parameters);
     *reg_read_val = reply.StatusPacket[5];
 
-    return !(reply.tx_err < 1) | reply.time_out;
+    return (reply.tx_err << 1) | reply.time_out;
 }
 
 /**

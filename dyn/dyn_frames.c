@@ -36,7 +36,7 @@ byte TxPacket(byte bID, byte bParameterLength, byte bInstruction,
               const byte *Parametros) {
     byte bCount, bCheckSum, bPacketLength;
     byte TxBuffer[32];
-    f_Sentit_Dades_Tx();  //El pin P3.0 (DIRECTION_PORT) el posem a 1 (Transmetre)
+    //f_Sentit_Dades_Tx();  //El pin P3.0 (DIRECTION_PORT) el posem a 1 (Transmetre)
     TxBuffer[0] = 0xff;    //Primers 2 bytes que indiquen inici de trama FF, FF.
     TxBuffer[1] = 0xff;
     TxBuffer[2] = bID;         //ID del mòdul al que volem enviar el missatge
@@ -63,7 +63,7 @@ byte TxPacket(byte bID, byte bParameterLength, byte bInstruction,
     }
 	while ((UCA2STATW & UCBUSY)) {
 	};   //Espera fins que s’ha transmès el últim byte
-    f_Sentit_Dades_Rx(); //Posem la línia de dades en Rx perquè el mòdul Dynamixel envia resposta
+    //f_Sentit_Dades_Rx(); //Posem la línia de dades en Rx perquè el mòdul Dynamixel envia resposta
     return (bPacketLength);
 }
 

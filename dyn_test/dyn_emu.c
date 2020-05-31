@@ -15,12 +15,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
-#include <time.h>
 
+#include "main.h"
 #include "movement_simulator.h"
 #include "fake_msp.h"
 #include "b_queue.h"
-#include "main.h"
 #include "dyn/dyn_instr.h"
 
 // State machine to implement the data transmission/reception
@@ -84,8 +83,8 @@ static uint8_t recv_byte() {
         ret = queue_pop(&tmp_byte, &q_tx);
     }
     printf("0x%02X ", tmp_byte);
-	UCA2IFG |= UCTXIFG; //Subo el flag "buffer TX libre"
-	UCA2STATW &= ~UCBUSY; //Bajo el flag "linea ocupada"
+    UCA2IFG |= UCTXIFG; //Subo el flag "buffer TX libre"
+    UCA2STATW &= ~UCBUSY; //Bajo el flag "linea ocupada"
 
     return tmp_byte;
 }
@@ -104,8 +103,8 @@ static void tx_byte(uint8_t data) {
         ret = queue_push(data, &q_rx);
     }
     printf("0x%02X ", data);
-	UCA2IFG |= UCTXIFG; //Subo el flag "buffer TX libre"
-	UCA2STATW &= ~UCBUSY; //Bajo el flag "linea ocupada"
+    UCA2IFG |= UCTXIFG; //Subo el flag "buffer TX libre"
+    UCA2STATW &= ~UCBUSY; //Bajo el flag "linea ocupada"
 }
 
 /**
@@ -201,7 +200,7 @@ void *dyn_emu(void *vargp) {
     p = (uint8_t *) dyn_mem;
     // Initialize the ID field of the dynamixel
     for (i = 0; i < N_DEVICES; ++i) {
-        *(p + i * DYN_MAX_POS + 3) = i;
+        *(p + i * DYN_MAX_POS + 3) = i + 1;
     }
     // TODO: Add other fields of interest of the dynamixel registers
 
