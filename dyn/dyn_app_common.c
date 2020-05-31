@@ -36,7 +36,7 @@ int dyn_led_read(uint8_t id, uint8_t *val) {
     return dyn_read_byte(id, DYN_REG__LED, val);
 }
 
-uint8_t trobar_pared_propera() {
+uint8_t trobar_paret_propera() {
     uint8_t dreta, esquerra, davant;
     dreta = distancia_dreta();
     esquerra = distancia_esquerra();

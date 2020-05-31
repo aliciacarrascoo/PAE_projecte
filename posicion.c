@@ -105,8 +105,9 @@ void distance(_robot_pos_t *robot_pos, uint8_t *izq, uint8_t *centro, uint8_t *d
     x0 = robot_pos->x; //posicion del bloque de sensores = Posicion del robot
     y0 = robot_pos->y; //posicion del bloque de sensores = Posicion del robot
     theta = robot_pos->theta; //orientacion del sensor central, paralela a la del robot
-    theta_l = theta - M_PI / 2;
-    theta_r = theta + M_PI / 2;
+
+    theta_l = theta + M_PI / 2;
+    theta_r = theta - M_PI / 2;
 
     //Sensor central:
     sensor_distance(x0, y0, theta, robot_pos->world, centro, 1);
