@@ -6,6 +6,8 @@
 
 #include "main.h"
 #include "dyn/dyn_app_common.h"
+#include "dyn/dyn_app_motors.h"
+#include "dyn/dyn_app_sensor.h"
 #include "dyn_test/dyn_emu.h"
 #include "dyn_test/b_queue.h"
 #include "joystick_emu/joystick.h"
