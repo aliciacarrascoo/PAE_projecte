@@ -41,19 +41,18 @@ int main(void) {
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);
-    accelerar();
-    pthread_kill(tid, SIGTERM);
-    pthread_kill(jid, SIGTERM);
-    printf("Programa terminado\n");
-    fflush(stdout);
-    return 0;
-
     //moure_endavant();
+    //accelerar();
+    trobar_paret_propera();
 
+    fflush(stdout);
+
+
+    //return 0;
     while (estado != Quit) {
-        if (simulator_finished) {
+        /*if (simulator_finished) {
             break;
-        }
+        }*/
         Get_estado(&estado, &estado_anterior);
         if (estado != estado_anterior) {
             Set_estado_anterior(estado);

@@ -59,7 +59,7 @@ uint8_t trobar_paret_propera() {
         }
     }
     while (distancia_frontal() > 5) {
-        moure_endavant(); //TODO: Passar-li per paràmetre velocitat
+        moure_endavant();
     }
     while (distancia_dreta() > 5) { // Es mou mentre gira??
         tirabuixo();

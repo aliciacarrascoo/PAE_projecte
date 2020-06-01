@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include "dyn_instr.h"
 
-int velocitat_dreta = 0x032;
-int velocitat_esquerra = 0x032;
+int velocitat_dreta = 0x0FF;
+int velocitat_esquerra = 0x0FF;
 int direccio_dreta = 1;
 int direccio_esquerra = 1;
 

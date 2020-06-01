@@ -30,6 +30,9 @@ int dyn_write_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t reg_write_val)
     reply = RxTxPacket(module_id, 2, DYN_INSTR__WRITE, parameters);
 
     // Retorna 1 si ha hagut algun error o s'ha esgotat el temps
+    int caca = reply.tx_err;
+    int popo = reply.time_out;
+    printf("ERR: %x, TIMEOUT: %x\n", caca, popo);
     return (reply.tx_err << 1) | reply.time_out;
 }
 

@@ -156,6 +156,8 @@ void decode_and_build_reply(instr_pck_header_t rx_header,
         case DYN_INSTR__WRITE:
             memcpy(&dyn_mem[rx_header.id - 1][rx_buff[0]], &rx_buff[1],
                    rx_header.len - 3);
+            printf("Columna: %x\n", rx_buff[0]);
+            printf("Valor: %x\n", dyn_mem[rx_header.id - 1][rx_buff[0]]);
             tx_header->len = 2;
             break;
         default:

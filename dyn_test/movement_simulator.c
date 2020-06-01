@@ -18,7 +18,7 @@
 #include "dyn_instr.h"
 #include "dyn_emu.h"
 
-#define MAX_SIM_STEPS 100
+#define MAX_SIM_STEPS 10000
 
 #define OUTPUT_FILE "movement.log"
 FILE *fichero;
@@ -69,10 +69,10 @@ bool elapsed_time(clock_t t1, uint32_t milliseconds, int32_t *true_elapsed_time)
  * @param motor_id ID of the Dynamixel module
  */
 void _speed_dyn_2_speed_int(int16_t *v, uint8_t motor_id) {
-    *v = dyn_mem[motor_id][DYN_REG_GOAL_SPEED_L];
-    *v |= ((dyn_mem[motor_id][DYN_REG_GOAL_SPEED_L] & 0x03) << 8);
-    if (dyn_mem[motor_id][DYN_REG_GOAL_SPEED_L] & 0x04) {
-        *v *= -1;
+    *v = dyn_mem[motor_id - 1][DYN_REG_MOV_SPEED_L];
+    *v |= ((dyn_mem[motor_id - 1][DYN_REG_MOV_SPEED_H] & 0x03) << 8);
+    if (dyn_mem[motor_id - 1][DYN_REG_MOV_SPEED_H] & 0x04) {
+        *v *= -1; //TODO:funciona be?
     }
 }
 
@@ -83,8 +83,8 @@ void read_speed() {
     _speed_dyn_2_speed_int(&robot_pos_str.iv_l, ID_MOTOR_L);
     _speed_dyn_2_speed_int(&robot_pos_str.iv_r, ID_MOTOR_R);
 
-    robot_pos_str.iv_l = 1023;
-    robot_pos_str.iv_r = 512;
+    //robot_pos_str.iv_l = 1023;
+    //robot_pos_str.iv_r = 512;
 }
 
 /** Update the position and orientation of the robot using two wheel differential drive kinematics
