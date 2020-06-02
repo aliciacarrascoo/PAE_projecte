@@ -43,7 +43,15 @@ int main(void) {
     fflush(stdout);
     //moure_endavant();
     //accelerar();
-    trobar_paret_propera();
+    //trobar_paret_propera();
+    //moure_enrere();
+    //moure_dreta();
+    //moure_esquerra();
+    //tirabuixo();
+    printf("distància frontal: %d\n", distancia_frontal());
+    printf("distància dreta: %d\n", distancia_dreta());
+    printf("distància esquerra: %d\n", distancia_esquerra());
+    moure_endavant();
 
     fflush(stdout);
 
@@ -60,13 +68,15 @@ int main(void) {
             switch (estado) {
                 case Sw1:
                     printf("Boton Sw1 ('a') apretado\n");
-                    dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
-                    printf("\n");
+                    //dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
+                    //printf("\n");
+                    parar();
                     break;
                 case Sw2:
                     printf("Boton Sw2 ('s') apretado\n");
-                    dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
-                    printf("\n");
+                    //dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
+                    //aprintf("\n");
+                    moure_dreta();
                     break;
                 case Up:
 

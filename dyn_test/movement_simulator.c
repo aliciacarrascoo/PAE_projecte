@@ -139,9 +139,9 @@ void calculate_new_position() {
  *
  */
 void update_sensor_data() {
-    distance(&robot_pos_str, &dyn_mem[ID_SENSOR][DYN_LEFT_IR_DATA],
-             &dyn_mem[ID_SENSOR][DYN_CENTER_IR_DATA],
-             &dyn_mem[ID_SENSOR][DYN_RIGHT_IR_DATA]);
+    distance(&robot_pos_str, &dyn_mem[ID_SENSOR - 1][DYN_LEFT_IR_DATA],
+             &dyn_mem[ID_SENSOR - 1][DYN_CENTER_IR_DATA],
+             &dyn_mem[ID_SENSOR - 1][DYN_RIGHT_IR_DATA]);
 }
 
 
@@ -150,8 +150,8 @@ void update_sensor_data() {
  */
 void init_movement_simulator(const uint32_t *world) {
     //TODO: If required, change to appropiate initial conditions
-    robot_pos_str.x = 1500;
-    robot_pos_str.y = 1500;
+    robot_pos_str.x = 150;
+    robot_pos_str.y = 150;
     robot_pos_str.x_p = (float) robot_pos_str.x;
     robot_pos_str.y_p = (float) robot_pos_str.y;
     robot_pos_str.theta = 0;

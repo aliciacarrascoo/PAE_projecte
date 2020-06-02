@@ -8,10 +8,10 @@
 #include <stdio.h>
 #include "dyn_instr.h"
 
-int velocitat_dreta = 0x0FF;
-int velocitat_esquerra = 0x0FF;
-int direccio_dreta = 1;
-int direccio_esquerra = 1;
+int velocitat_dreta = 0x3FF;
+int velocitat_esquerra = 0x3FF;
+int direccio_dreta = 0;
+int direccio_esquerra = 0;
 
 // Per a la millor fluidesa dels motors, posem a 0 els registres corresponents als angles
 void set_endless_turn_mode() {
@@ -26,8 +26,12 @@ void set_endless_turn_mode() {
 // Posar les dues rodes en la mateixa velocitat i sentit contrari
 void moure_endavant() {
 
-    direccio_dreta = 1;
-    direccio_esquerra = 1;
+    direccio_dreta = 0;
+    direccio_esquerra = 0;
+
+    if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
+    else velocitat_dreta = velocitat_esquerra;
+
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
@@ -49,13 +53,16 @@ void moure_endavant() {
 
 void moure_enrere() {
 
-    direccio_dreta = 0;
-    direccio_esquerra = 0;
+    direccio_dreta = 1;
+    direccio_esquerra = 1;
+
+    if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
+    else velocitat_dreta = velocitat_esquerra;
+
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
     printf("\nEstem posant a velocitat %d el motor 2 i a direcció %d\n", velocitat_dreta, direccio_dreta);
-    //posar roda dreta a velocitat 50 rpm (per ara)
     if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
         printf("Error en moure_enrere roda dreta\n");
@@ -75,8 +82,11 @@ void moure_enrere() {
  */
 void tirabuixo() {
 
-    direccio_dreta = 1;
+    direccio_dreta = 0;
     uint8_t val[2];
+
+    if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
+    else velocitat_dreta = velocitat_esquerra;
 
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
@@ -88,7 +98,7 @@ void tirabuixo() {
         printf("Error en tirabuixo\n");
     }
 
-    direccio_esquerra = 0;
+    direccio_esquerra = 1;
 
     val[0] = velocitat_esquerra & 0xFF;
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
@@ -160,7 +170,7 @@ void disminuir_velocitat(int idd) {
     }
 
     //enviar nova velocitat pel mòdul id
-    if (velocitat >= 0x0B)velocitat -= 0xA;
+    if (velocitat >= 0x0B) velocitat -= 0xA;
     val[0] = velocitat & 0xFF;
     val[1] = ((direccio << 2) & 0x04) | ((velocitat >> 8) & 0x03);
     printf("\nPosem la roda %d a velocitat -10 i mateixa direcció\n", id);
@@ -182,15 +192,15 @@ void moure_dreta() {
 
     uint8_t val[2];
 
-    val[0] = velocitat_dreta & 0xFF;
-    val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
-    printf("\nPosem roda 2 a velocitat 50 i direcció contrària a la roda 1\n");
-    if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
+    val[0] = velocitat_esquerra & 0xFF;
+    val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
+    printf("\nPosem roda 1 a velocitat %x\n", velocitat_esquerra);
+    if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
         printf("Error en moure_dreta\n");
     }
 
-    augmentar_velocitat(1);
+    disminuir_velocitat(2);
 
 }
 
@@ -202,15 +212,17 @@ void moure_esquerra() {
 
     uint8_t val[2];
 
-    val[0] = velocitat_esquerra & 0xFF;
-    val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
-    if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
+    val[0] = velocitat_dreta & 0xFF;
+    val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
+    printf("\nPosem roda 2 a velocitat %x\n", velocitat_dreta);
+
+    if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
         printf("Error en moure_esquerra\n");
     }
 
     // Augmenta velocitat de la roda dreta (id 2)
-    augmentar_velocitat(2);
+    disminuir_velocitat(1);
 
 }
 
@@ -235,6 +247,8 @@ void parar() {
         //si entra ha succeït error
         printf("Error en parar\n");
     }
+    velocitat_dreta = 0;
+    velocitat_esquerra = 0;
 }
 
 /*
