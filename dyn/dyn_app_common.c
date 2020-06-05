@@ -41,7 +41,7 @@ uint8_t trobar_paret_propera() {
     dreta = distancia_dreta();
     esquerra = distancia_esquerra();
     davant = distancia_frontal();
-    //
+
     if (davant > esquerra) {
         // Prendrà com a fita superior la captada pel sensor esquerra
         if (dreta > esquerra) { // esquerra la més propera (fita superior)
@@ -58,10 +58,13 @@ uint8_t trobar_paret_propera() {
             }
         }
     }
-    while (distancia_frontal() > 5) {
-        moure_endavant();
+    moure_endavant();
+    while (distancia_frontal() > 20){
+        fprintf(stderr, "FRONTAL: %d\n", distancia_frontal());
     }
-    while (distancia_dreta() > 5) { // Es mou mentre gira??
-        tirabuixo();
+    tirabuixo();
+    while (distancia_dreta() > 10) { // Gira fins que li queda la paret a l'esquerra
+        fprintf(stderr, "DRETA: %d\n", distancia_dreta());
     }
+    parar();
 }

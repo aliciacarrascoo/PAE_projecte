@@ -150,7 +150,7 @@ void update_sensor_data() {
  */
 void init_movement_simulator(const uint32_t *world) {
     //TODO: If required, change to appropiate initial conditions
-    robot_pos_str.x = 150;
+    robot_pos_str.x = 300;
     robot_pos_str.y = 150;
     robot_pos_str.x_p = (float) robot_pos_str.x;
     robot_pos_str.y_p = (float) robot_pos_str.y;
@@ -160,6 +160,7 @@ void init_movement_simulator(const uint32_t *world) {
     simulator_finished = false;
 
     t_last_upd = clock();
+    update_sensor_data();
 
 #if DEBUG_LEVEL > 2
     fichero = fopen(OUTPUT_FILE, "w+"); //creacion del fichero de salida, en escritura

@@ -43,24 +43,22 @@ int main(void) {
     fflush(stdout);
     //moure_endavant();
     //accelerar();
-    //trobar_paret_propera();
+    trobar_paret_propera();
     //moure_enrere();
     //moure_dreta();
     //moure_esquerra();
     //tirabuixo();
-    printf("distància frontal: %d\n", distancia_frontal());
-    printf("distància dreta: %d\n", distancia_dreta());
-    printf("distància esquerra: %d\n", distancia_esquerra());
-    moure_endavant();
+
+    //moure_endavant();
 
     fflush(stdout);
 
 
     //return 0;
     while (estado != Quit) {
-        /*if (simulator_finished) {
+        if (simulator_finished) {
             break;
-        }*/
+        }
         Get_estado(&estado, &estado_anterior);
         if (estado != estado_anterior) {
             Set_estado_anterior(estado);
@@ -71,12 +69,13 @@ int main(void) {
                     //dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
                     //printf("\n");
                     parar();
+
                     break;
                 case Sw2:
                     printf("Boton Sw2 ('s') apretado\n");
                     //dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
                     //aprintf("\n");
-                    moure_dreta();
+                    tirabuixo();
                     break;
                 case Up:
 
@@ -114,6 +113,9 @@ int main(void) {
 
                     break;
                 case Quit:
+                    printf("distància frontal: %d\n", distancia_frontal());
+                    printf("distància dreta: %d\n", distancia_dreta());
+                    printf("distància esquerra: %d\n", distancia_esquerra());
                     printf("Adios!\n");
                     break;
                 //etc, etc...
