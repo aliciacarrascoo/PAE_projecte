@@ -13,7 +13,7 @@ void moure_endavant();
 void moure_enrere();
 void moure_dreta();
 void moure_esquerra();
-void tirabuixo();
+void tirabuixo(int);
 int augmentar_velocitat(int);
 int disminuir_velocitat(int);
 void parar();

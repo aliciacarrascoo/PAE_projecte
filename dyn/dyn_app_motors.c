@@ -25,64 +25,78 @@ void set_endless_turn_mode() {
 
 // Posar les dues rodes en la mateixa velocitat i sentit contrari
 void moure_endavant() {
-
+    printf("\nAccionem moure_endavant\n\n");
     direccio_dreta = 0;
     direccio_esquerra = 0;
 
     if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
     else velocitat_dreta = velocitat_esquerra;
 
+    if (velocitat_esquerra == 0) {
+        velocitat_esquerra = 0x3FF;
+        velocitat_dreta = 0x3FF;
+    }
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
-    printf("\nEstem posant a velocitat %d el motor 2 i a direcció %d\n", velocitat_dreta, direccio_dreta);
     //posar roda dreta a velocitat 50 rpm (per ara)
     if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_endavant roda dreta\n");
+        //printf("Error en moure_endavant roda dreta\n");
     }
     val[0] = velocitat_esquerra & 0xFF;
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
-    printf("\nEstem posant a velocitat %d el motor 1 i a direccio %d\n", velocitat_esquerra, direccio_esquerra);
     if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_endavant roda esquerra\n");
+        //printf("Error en moure_endavant roda esquerra\n");
     }
 
 }
 
 void moure_enrere() {
-
+    printf("\nAccionem moure_enrere\n\n");
     direccio_dreta = 1;
     direccio_esquerra = 1;
 
     if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
     else velocitat_dreta = velocitat_esquerra;
 
+    if (velocitat_esquerra == 0) {
+        velocitat_esquerra = 0x3FF;
+        velocitat_dreta = 0x3FF;
+    }
+
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
-    printf("\nEstem posant a velocitat %d el motor 2 i a direcció %d\n", velocitat_dreta, direccio_dreta);
     if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_enrere roda dreta\n");
+        //printf("Error en moure_enrere roda dreta\n");
     }
     val[0] = velocitat_esquerra & 0xFF;
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
-    printf("\nEstem posant a velocitat %d el motor 1 i a direccio %d\n", velocitat_esquerra, direccio_esquerra);
     if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_enrere roda esquerra\n");
+        //printf("Error en moure_enrere roda esquerra\n");
     }
 
 }
 
 /*
- * Girar sobre ell mateix en sentit horari a velocitat 50 rpm i direcció 1 les dues rodes
+ * Girar sobre ell mateix
+ * dir = 0 ---> sentit horari
+ * dir = 1 ---> sentit antihorari
  */
-void tirabuixo() {
+void tirabuixo(int dir) {
 
-    direccio_dreta = 0;
+    printf("\nAccionem tirabuixó\n\n");
+
+    if (dir == 1) direccio_dreta = 0;
+    else if (dir == 0) direccio_dreta = 1;
+    else {
+        fprintf(stderr, "S'ha cridat tirabuixó mb un paràmetre incorrecte");
+        return;
+    }
     uint8_t val[2];
 
     if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
@@ -97,22 +111,23 @@ void tirabuixo() {
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
 
     //roda dreta
-    printf("\nPosa roda 2 a velocitat 50 i direcció 1\n");
+
     if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en tirabuixo\n");
+        //printf("Error en tirabuixo\n");
     }
 
-    direccio_esquerra = 1;
+    if (dir == 1) direccio_esquerra = 1;
+    else direccio_esquerra = 0;
 
     val[0] = velocitat_esquerra & 0xFF;
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
 
     //roda esquerra
-    printf("\nPosa roda 1 a velocitat 50 i direcció 1\n");
+    //printf("\nPosa roda 1 a velocitat 50 i direcció 1\n");
     if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en tirabuixo\n");
+        //printf("Error en tirabuixo\n");
     }
 }
 
@@ -184,7 +199,7 @@ void disminuir_velocitat(int idd) {
         printf("\nPosem la roda %d a velocitat -10 i mateixa direcció\n", id);
         if (dyn_write(id, DYN_REG_MOV_SPEED_L, val, 2)) {
             //si entra ha succeït error
-            printf("Error en disminuir_velocitat de roda %d\n", id);
+            //printf("Error en disminuir_velocitat de roda %d\n", id);
         }
     }
 
@@ -206,7 +221,7 @@ void moure_dreta() {
     printf("\nPosem roda 1 a velocitat %x\n", velocitat_esquerra);
     if (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_dreta\n");
+        //printf("Error en moure_dreta\n");
     }
 
     disminuir_velocitat(2);
@@ -218,16 +233,15 @@ void moure_dreta() {
  * Posem la roda esquerra en direcció contrària a la de la dreta i a velocitat "base" (50 rpm).
  */
 void moure_esquerra() {
-
+    printf("\nAccionem moure_esquerra\n\n");
     uint8_t val[2];
 
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
-    printf("\nPosem roda 2 a velocitat %x\n", velocitat_dreta);
 
     if (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2)) {
         //si entra ha succeït error
-        printf("Error en moure_esquerra\n");
+        //printf("Error en moure_esquerra\n");
     }
 
     // Augmenta velocitat de la roda dreta (id 2)

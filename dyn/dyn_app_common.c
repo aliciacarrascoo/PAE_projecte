@@ -38,33 +38,49 @@ int dyn_led_read(uint8_t id, uint8_t *val) {
 
 uint8_t trobar_paret_propera() {
     uint8_t dreta, esquerra, davant;
+    int dist;
     dreta = distancia_dreta();
     esquerra = distancia_esquerra();
     davant = distancia_frontal();
+    fprintf(stderr, "DRETA: %d\nESQUERRA: %d\nDAVANT: %d\n\n", dreta, esquerra, davant);
 
-    if (davant > esquerra) {
+
+    if (davant >= esquerra && !(davant == esquerra && dreta == davant)) {
         // Prendrà com a fita superior la captada pel sensor esquerra
-        if (dreta > esquerra) { // esquerra la més propera (fita superior)
-            // NO SABEM QUANT ÉS 90 GRAUS
+        if (dreta >= esquerra) { // esquerra la més propera (fita superior)
             // Va rotant sobre si mateix fins que s'encara amb una paret més propera o igual a la que havia detectat com
             // a més aprop, no només mirem les 3 direccions base
-            while(esquerra < distancia_frontal()) {
-                tirabuixo();
+            tirabuixo(0);
+            dist = 255;
+            while(esquerra + 5 < dist) {
+                dist = distancia_frontal();
+                fprintf(stderr, "DAVANT: %d\n", dist);
             }
 
         } else { // Prendrà com a fita superior la captada pel sensor dret
-            while(dreta < distancia_frontal()) {
-                tirabuixo();
+            tirabuixo(1);
+            dist = 255;
+            // El +5 és el marge d'error, donat que fet tirabuixó es pot moure alguna posició
+            while(dreta + 5 < dist) {
+                dist = distancia_frontal();
+                fprintf(stderr, "DAVANT: %d\n", dist);
             }
         }
     }
+    // S'apropa cap a la paret
     moure_endavant();
-    while (distancia_frontal() > 20){
-        fprintf(stderr, "FRONTAL: %d\n", distancia_frontal());
+    dist = 255;
+    while (dist > 20){
+        dist = distancia_frontal();
+        fprintf(stderr, "FRONTAL: %d\n", dist);
     }
-    tirabuixo();
-    while (distancia_dreta() > 10) { // Gira fins que li queda la paret a l'esquerra
-        fprintf(stderr, "DRETA: %d\n", distancia_dreta());
+
+    // Rota sobre sí mateix fins que s'ha encarat cap a la direcció que haurà de seguir desprès
+    tirabuixo(1);
+    dist = 255;
+    while (dist > 15) { // Gira fins que li queda la paret a l'esquerra
+        dist = distancia_dreta();
+        fprintf(stderr, "DRETA: %d\n", dist);
     }
     parar();
 }

@@ -41,15 +41,17 @@ int main(void) {
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);
+
+    set_endless_turn_mode();
     //moure_endavant();
     //accelerar();
-    trobar_paret_propera();
+    //trobar_paret_propera();
     //moure_enrere();
     //moure_dreta();
     //moure_esquerra();
     //tirabuixo();
-
-    //moure_endavant();
+    parar();
+    moure_endavant();
 
     fflush(stdout);
 
@@ -75,7 +77,7 @@ int main(void) {
                     printf("Boton Sw2 ('s') apretado\n");
                     //dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
                     //aprintf("\n");
-                    tirabuixo();
+                    tirabuixo(0);
                     break;
                 case Up:
 
