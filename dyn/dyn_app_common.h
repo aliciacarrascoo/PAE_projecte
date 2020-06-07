@@ -16,6 +16,8 @@ int dyn_led_control(uint8_t id, bool val);
 
 int dyn_led_read(uint8_t id, uint8_t *val);
 
-uint8_t  trobar_paret_propera();
+void trobar_paret_propera();
+
+void resseguir_paret();
 
 #endif /* DYN_APP_COMMON_H_ */

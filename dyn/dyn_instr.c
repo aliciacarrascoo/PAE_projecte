@@ -72,12 +72,30 @@ int dyn_read_byte(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *reg_read_val) 
  * @return Error code to be treated at higher levels.
  */
 int dyn_write(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {
-    uint8_t i;
+    uint8_t parameters[len + 1];
+    struct RxReturn reply;
+
+    parameters[0] = reg_addr;
+
+    for(int i = 0; i < len; i++) {
+        parameters[i + 1] = *(val + i);
+    }
+    for(int i = 0; i < len*2; i++) {
+        printf("PARAMETRE (%d) = %x \n", i, parameters[i]);
+    }
+    reply = RxTxPacket(module_id, len + 1, DYN_INSTR__WRITE, parameters);
+
+    // Retorna 1 si ha hagut algun error o s'ha esgotat el temps
+    //int caca = reply.tx_err;
+    //int popo = reply.time_out;
+    //printf("ERR: %x, TIMEOUT: %x\n", caca, popo);
+    return (reply.tx_err << 1) | reply.time_out;
+    /*uint8_t i;
     bool err = false;
     for (i = 0; i < len; i++) {
         if (dyn_write_byte(module_id, reg_addr + i, val[i])) err = true;
     }
-    return err;
+    return err;*/
 }
 
 int dyn_read(uint8_t module_id, DYN_REG_t reg_addr, uint8_t *val, uint8_t len) {

@@ -45,13 +45,12 @@ int main(void) {
     set_endless_turn_mode();
     //moure_endavant();
     //accelerar();
-    //trobar_paret_propera();
+    trobar_paret_propera();
+    moure_endavant();
     //moure_enrere();
     //moure_dreta();
     //moure_esquerra();
-    //tirabuixo();
-    parar();
-    moure_endavant();
+    //tirabuixo(1);
 
     fflush(stdout);
 

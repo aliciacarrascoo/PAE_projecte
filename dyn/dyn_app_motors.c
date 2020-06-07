@@ -8,24 +8,28 @@
 #include <stdio.h>
 #include "dyn_instr.h"
 
-int velocitat_dreta = 0x3FF;
-int velocitat_esquerra = 0x3FF;
+int velocitat_dreta = 0xFF;
+int velocitat_esquerra = 0xFF;
 int direccio_dreta = 0;
 int direccio_esquerra = 0;
 
 // Per a la millor fluidesa dels motors, posem a 0 els registres corresponents als angles
 void set_endless_turn_mode() {
 
-    uint8_t val = 0;
+    uint8_t val[4];
+    val[0] = 0;
+    val[1] = 0;
+    val[2] = 0;
+    val[3] = 0;
 
-    dyn_write(2, DYN_REG_CW_ANGLE_LIMIT_L, &val, 4);
-    dyn_write(1, DYN_REG_CW_ANGLE_LIMIT_L, &val, 4);
+    dyn_write(2, DYN_REG_CW_ANGLE_LIMIT_L, val, 4);
+    dyn_write(1, DYN_REG_CW_ANGLE_LIMIT_L, val, 4);
 
 }
 
 // Posar les dues rodes en la mateixa velocitat i sentit contrari
 void moure_endavant() {
-    printf("\nAccionem moure_endavant\n\n");
+    //printf("\nAccionem moure_endavant\n\n");
     direccio_dreta = 0;
     direccio_esquerra = 0;
 
@@ -33,8 +37,8 @@ void moure_endavant() {
     else velocitat_dreta = velocitat_esquerra;
 
     if (velocitat_esquerra == 0) {
-        velocitat_esquerra = 0x3FF;
-        velocitat_dreta = 0x3FF;
+        velocitat_esquerra = 0xFF;
+        velocitat_dreta = 0xFF;
     }
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
@@ -62,8 +66,8 @@ void moure_enrere() {
     else velocitat_dreta = velocitat_esquerra;
 
     if (velocitat_esquerra == 0) {
-        velocitat_esquerra = 0x3FF;
-        velocitat_dreta = 0x3FF;
+        velocitat_esquerra = 0xFF;
+        velocitat_dreta = 0xFF;
     }
 
     uint8_t val[2];
@@ -102,8 +106,8 @@ void tirabuixo(int dir) {
     if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
     // si estava parat
     else if (velocitat_dreta == 0 && velocitat_esquerra == 0) {
-        velocitat_dreta = 0x3FF;
-        velocitat_esquerra = 0x3FF;
+        velocitat_dreta = 0xFF;
+        velocitat_esquerra = 0xFF;
     }
     else velocitat_dreta = velocitat_esquerra;
 
