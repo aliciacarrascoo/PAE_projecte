@@ -87,6 +87,7 @@ void trobar_paret_propera() {
 }
 
 void resseguir_paret() {
+    printf("\nHa entrat resseguir\n\n");
     bool correcte = true, davant = false;
 
     moure_endavant();
@@ -106,6 +107,7 @@ void resseguir_paret() {
 }
 
 void corregir_dreta() {
+    printf("\nHa entrat corregir_dreta\n\n");
     moure_dreta();
     while (distancia_dreta() > 30) {}
     moure_endavant();
@@ -113,6 +115,7 @@ void corregir_dreta() {
 }
 
 void corregir_esquerra() {
+    printf("\nHa entrat corregir_esq\n\n");
     moure_esquerra();
     while (distancia_dreta() < 20) {}
     moure_endavant();
@@ -123,6 +126,7 @@ void corregir_esquerra() {
  * Funció que prén la desició de què fer quan el robot es troba un obstacle davant a menys de 20mm.
  */
 void obstacle_davant() {
+    printf("\nHa entrat obstacle davant\n\n");
     if (distancia_esquerra() > 30) {
         //gira fins que no hi ha obstacles davant a menys de 30 mm
         tirabuixo(1);
@@ -136,6 +140,7 @@ void obstacle_davant() {
         tirabuixo(1);
     }
     while (distancia_frontal() < 30) {}
+    printf("\nHa sortit del while i ara va endavant\n\n");
     moure_endavant();
     return;
 }
