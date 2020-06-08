@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include "dyn_instr.h"
 
-int velocitat_dreta = 0xFF;
-int velocitat_esquerra = 0xFF;
+int velocitat_dreta = 0x3FF;
+int velocitat_esquerra = 0x3FF;
 int direccio_dreta = 0;
 int direccio_esquerra = 0;
 
@@ -37,8 +37,8 @@ void moure_endavant() {
     else velocitat_dreta = velocitat_esquerra;
 
     if (velocitat_esquerra == 0) {
-        velocitat_esquerra = 0xFF;
-        velocitat_dreta = 0xFF;
+        velocitat_esquerra = 0x3FF;
+        velocitat_dreta = 0x3FF;
     }
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
@@ -66,8 +66,8 @@ void moure_enrere() {
     else velocitat_dreta = velocitat_esquerra;
 
     if (velocitat_esquerra == 0) {
-        velocitat_esquerra = 0xFF;
-        velocitat_dreta = 0xFF;
+        velocitat_esquerra = 0x3FF;
+        velocitat_dreta = 0x3FF;
     }
 
     uint8_t val[2];
@@ -106,8 +106,8 @@ void tirabuixo(int dir) {
     if (velocitat_dreta > velocitat_esquerra) velocitat_esquerra = velocitat_dreta;
     // si estava parat
     else if (velocitat_dreta == 0 && velocitat_esquerra == 0) {
-        velocitat_dreta = 0xFF;
-        velocitat_esquerra = 0xFF;
+        velocitat_dreta = 0x3FF;
+        velocitat_esquerra = 0x3FF;
     }
     else velocitat_dreta = velocitat_esquerra;
 

@@ -94,13 +94,13 @@ void resseguir_paret() {
 
     while (correcte) {
         //hem trobat un obstacle davant
-        if (distancia_frontal() < 20) {
+        if (distancia_frontal() < 40) {
             obstacle_davant();
         }
-        if (distancia_dreta() < 20) {
+        if (distancia_dreta() < 30) {
             corregir_esquerra();
         }
-        if (distancia_dreta() > 30) {
+        if (distancia_dreta() > 35) {
             corregir_dreta();
         }
     }
@@ -109,7 +109,12 @@ void resseguir_paret() {
 void corregir_dreta() {
     printf("\nHa entrat corregir_dreta\n\n");
     moure_dreta();
-    while (distancia_dreta() > 30) {}
+    while (distancia_dreta() > 50) {
+        if (distancia_frontal() < 40) {
+            obstacle_davant();
+            return;
+        }
+    }
     moure_endavant();
     return;
 }
@@ -117,7 +122,7 @@ void corregir_dreta() {
 void corregir_esquerra() {
     printf("\nHa entrat corregir_esq\n\n");
     moure_esquerra();
-    while (distancia_dreta() < 20) {}
+    while (distancia_dreta() < 30) {}
     moure_endavant();
     return;
 }
@@ -127,11 +132,11 @@ void corregir_esquerra() {
  */
 void obstacle_davant() {
     printf("\nHa entrat obstacle davant\n\n");
-    if (distancia_esquerra() > 30) {
+    if (distancia_esquerra() > 50) {
         //gira fins que no hi ha obstacles davant a menys de 30 mm
         tirabuixo(1);
     }
-    else if (distancia_dreta() > 30) {
+    else if (distancia_dreta() > 50) {
         //gira fins que no hi ha obstacles davant a menys de 30 mm
         tirabuixo(0);
     }
@@ -139,7 +144,7 @@ void obstacle_davant() {
         //gira fins que no hi ha obstacles davant a menys de 30 mm
         tirabuixo(1);
     }
-    while (distancia_frontal() < 30) {}
+    while (distancia_frontal() < 50) {}
     printf("\nHa sortit del while i ara va endavant\n\n");
     moure_endavant();
     return;
