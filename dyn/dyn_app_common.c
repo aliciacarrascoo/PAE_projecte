@@ -15,6 +15,12 @@
 #include "dyn_app_sensor.h"
 #include "dyn_app_motors.h"
 
+void obstacle_davant();
+
+void corregir_esquerra();
+
+void corregir_dreta();
+
 /**
  * Turn on or off the LED of a given dynamixel module
  *
@@ -81,5 +87,55 @@ void trobar_paret_propera() {
 }
 
 void resseguir_paret() {
+    bool correcte = true, davant = false;
 
+    moure_endavant();
+
+    while (correcte) {
+        //hem trobat un obstacle davant
+        if (distancia_frontal() < 20) {
+            obstacle_davant();
+        }
+        if (distancia_dreta() < 20) {
+            corregir_esquerra();
+        }
+        if (distancia_dreta() > 30) {
+            corregir_dreta();
+        }
+    }
+}
+
+void corregir_dreta() {
+    moure_dreta();
+    while (distancia_dreta() > 30) {}
+    moure_endavant();
+    return;
+}
+
+void corregir_esquerra() {
+    moure_esquerra();
+    while (distancia_dreta() < 20) {}
+    moure_endavant();
+    return;
+}
+
+/*
+ * Funció que prén la desició de què fer quan el robot es troba un obstacle davant a menys de 20mm.
+ */
+void obstacle_davant() {
+    if (distancia_esquerra() > 30) {
+        //gira fins que no hi ha obstacles davant a menys de 30 mm
+        tirabuixo(1);
+    }
+    else if (distancia_dreta() > 30) {
+        //gira fins que no hi ha obstacles davant a menys de 30 mm
+        tirabuixo(0);
+    }
+    else {
+        //gira fins que no hi ha obstacles davant a menys de 30 mm
+        tirabuixo(1);
+    }
+    while (distancia_frontal() < 30) {}
+    moure_endavant();
+    return;
 }

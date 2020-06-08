@@ -46,7 +46,8 @@ int main(void) {
     //moure_endavant();
     //accelerar();
     trobar_paret_propera();
-    moure_endavant();
+    resseguir_paret();
+    //moure_endavant();
     //moure_enrere();
     //moure_dreta();
     //moure_esquerra();
