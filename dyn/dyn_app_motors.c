@@ -15,7 +15,7 @@ int direccio_esquerra = 0;
 
 // Per a la millor fluidesa dels motors, posem a 0 els registres corresponents als angles
 void set_endless_turn_mode() {
-
+    printf("\nAccionem endless_turn_mode\n\n");
     uint8_t val[4];
     val[0] = 0;
     val[1] = 0;
@@ -29,8 +29,7 @@ void set_endless_turn_mode() {
 
 // Posar les dues rodes en la mateixa velocitat i sentit contrari
 void moure_endavant() {
-    int error;
-    //printf("\nAccionem moure_endavant\n\n");
+    printf("\nAccionem moure_endavant\n\n");
     direccio_dreta = 0;
     direccio_esquerra = 0;
 
@@ -82,7 +81,7 @@ void moure_enrere() {
  * dir = 1 ---> sentit antihorari
  */
 void tirabuixo(int dir) {
-
+    printf("\nAccionem tirabuixó\n\n");
     if (dir == 1) direccio_dreta = 0;
     else if (dir == 0) direccio_dreta = 1;
     else {
@@ -146,7 +145,6 @@ void augmentar_velocitat(int idd) {
 
         val[0] = velocitat & 0xFF;
         val[1] = ((direccio << 2) & 0x04) | ((velocitat >> 8) & 0x03);
-        printf("\nPosem la roda %d a velocitat +10 i mateixa direcció\n", id);
         while (dyn_write(id, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
     }
 
@@ -179,7 +177,6 @@ void disminuir_velocitat(int idd) {
         velocitat -= 0x0A;
         val[0] = velocitat & 0xFF;
         val[1] = ((direccio << 2) & 0x04) | ((velocitat >> 8) & 0x03);
-        printf("\nPosem la roda %d a velocitat -10 i mateixa direcció\n", id);
         while (dyn_write(id, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
     }
 
@@ -193,12 +190,11 @@ void disminuir_velocitat(int idd) {
  * Posem la roda dreta en direcció contrària a la de la esquerra i a velocitat "base" (50 rpm).
  */
 void moure_dreta() {
-
+    printf("\nAccionem moure_dreta\n\n");
     uint8_t val[2];
 
     val[0] = velocitat_esquerra & 0xFF;
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
-    printf("\nPosem roda 1 a velocitat %x\n", velocitat_esquerra);
     while (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 
     disminuir_velocitat(2);
@@ -227,16 +223,15 @@ void moure_esquerra() {
  * Posa a velocitat i direcció 0 les dues rodes.
  */
 void parar() {
+    printf("\nAccionem parar\n\n");
     uint8_t val[2];
     val[0] = 0;
     val[1] = 0;
 
     //roda dreta
-    printf("\nPosa la roda 2 a velocitat i direcció 0\n");
     while (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 
     //roda esquerra
-    printf("\nPosa la roda 1 a velocitat i direcció 0\n");
     while (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
     velocitat_dreta = 0;
     velocitat_esquerra = 0;
