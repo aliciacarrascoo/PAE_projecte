@@ -122,7 +122,12 @@ void corregir_dreta() {
 void corregir_esquerra() {
     printf("\nHa entrat corregir_esq\n\n");
     moure_esquerra();
-    while (distancia_dreta() < 30) {}
+    while (distancia_dreta() < 30) {
+        if (distancia_frontal() < 40) {
+            obstacle_davant();
+            return;
+        }
+    }
     moure_endavant();
     return;
 }
