@@ -73,6 +73,7 @@ struct RxReturn RxPacket(void) {
 
     respuesta.time_out = false;
     respuesta.idx = 0;
+    respuesta.tx_err = false;
     //f_Sentit_Dades_Rx();   //Ponemos la linea half duplex en Rx
     //f_Activa_Timer_TimeOut();
     for (bCount = 0; bCount < 4; bCount++) {

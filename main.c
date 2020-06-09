@@ -43,15 +43,8 @@ int main(void) {
     fflush(stdout);
 
     set_endless_turn_mode();
-    //moure_endavant();
-    //accelerar();
     trobar_paret_propera();
     resseguir_paret();
-    //moure_endavant();
-    //moure_enrere();
-    //moure_dreta();
-    //moure_esquerra();
-    //tirabuixo(1);
 
     fflush(stdout);
 
@@ -115,9 +108,6 @@ int main(void) {
 
                     break;
                 case Quit:
-                    printf("distància frontal: %d\n", distancia_frontal());
-                    printf("distància dreta: %d\n", distancia_dreta());
-                    printf("distància esquerra: %d\n", distancia_esquerra());
                     printf("Adios!\n");
                     break;
                 //etc, etc...

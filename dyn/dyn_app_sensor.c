@@ -13,27 +13,21 @@
 uint8_t distancia_frontal() {
     uint8_t val = 0;
     printf("\nLlegim la distància frontal\n");
-    if(!dyn_read_byte(3, DYN_CENTER_IR_DATA, &val)) {
-        //printf("Error sensor frontal\n");
-    }
+    while (dyn_read_byte(3, DYN_CENTER_IR_DATA, &val) != 0) {}
     return val;
 }
 
 uint8_t distancia_esquerra() {
     uint8_t val = 0;
     printf("\nLlegim la distància esquerra\n");
-    if(!dyn_read_byte(3, DYN_LEFT_IR_DATA, &val)) {
-        //printf("Error sensor esquerre\n");
-    }
+    while (dyn_read_byte(3, DYN_LEFT_IR_DATA, &val) != 0) {}
     return val;
 }
 
 uint8_t distancia_dreta() {
     uint8_t val = 0;
     printf("\nLlegim la distància dreta\n");
-    if(!dyn_read_byte(3, DYN_RIGHT_IR_DATA, &val)) {
-        //printf("Error sensor dret\n");
-    }
+    while (dyn_read_byte(3, DYN_RIGHT_IR_DATA, &val) != 0) {}
     return val;
 }
 
