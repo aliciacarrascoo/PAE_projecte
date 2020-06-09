@@ -18,7 +18,7 @@
 #include "dyn_instr.h"
 #include "dyn_emu.h"
 
-#define MAX_SIM_STEPS 10000
+#define MAX_SIM_STEPS 100000
 
 #define OUTPUT_FILE "movement.log"
 FILE *fichero;

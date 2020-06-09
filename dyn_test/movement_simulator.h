@@ -13,7 +13,7 @@
 #include <time.h>
 #include "dyn_emu.h"
 
-#define SIM_STEP_MS_TIME 50
+#define SIM_STEP_MS_TIME 10
 
 typedef struct _robot_pos {
     uint16_t x;
