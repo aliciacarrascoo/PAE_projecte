@@ -160,7 +160,7 @@ void augmentar_velocitat(int idd) {
 
     //enviar nova velocitat pel mòdul id
     if (velocitat <= 0x3FF - 0x0A) {
-        velocitat += 0xA;
+        velocitat += 0x0A;
 
         val[0] = velocitat & 0xFF;
         val[1] = ((direccio << 2) & 0x04) | ((velocitat >> 8) & 0x03);
@@ -197,7 +197,7 @@ void disminuir_velocitat(int idd) {
 
     //enviar nova velocitat pel mòdul id
     if (velocitat >= 0x0B) {
-        velocitat -= 0xA;
+        velocitat -= 0x0A;
         val[0] = velocitat & 0xFF;
         val[1] = ((direccio << 2) & 0x04) | ((velocitat >> 8) & 0x03);
         printf("\nPosem la roda %d a velocitat -10 i mateixa direcció\n", id);
