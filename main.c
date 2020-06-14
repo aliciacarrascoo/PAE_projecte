@@ -22,8 +22,6 @@ uint32_t indice;
 int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
-    //Primero de tot, le pasamos al simulador el puntero a la habitacion:
-    //init_world();
 
     // Per a no haver de fer fflush rere cada print
     setbuf(stdout, NULL);
@@ -42,8 +40,11 @@ int main(void) {
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);
 
+    // Establim l'angle límit de rotació de les rodes a 0 (moviment continu)
     set_endless_turn_mode();
+    // Anem a la paret més propera (en cas que trobi una a menys de 255 de la posició incial), sino endavant
     trobar_paret_propera();
+    // Reseguim la paret en direcció antihorària (loop principal de l'aplicació)
     resseguir_paret();
 
     fflush(stdout);

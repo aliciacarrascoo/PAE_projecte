@@ -43,7 +43,6 @@ void moure_endavant() {
     uint8_t val[2];
     val[0] = velocitat_dreta & 0xFF;
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
-    //posar roda dreta a velocitat 50 rpm (per ara)
     while (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 
     val[0] = velocitat_esquerra & 0xFF;
@@ -102,7 +101,6 @@ void tirabuixo(int dir) {
     val[1] = ((direccio_dreta << 2) & 0x04) | ((velocitat_dreta >> 8) & 0x03);
 
     //roda dreta
-
     while (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 
     if (dir == 1) direccio_esquerra = 1;
@@ -112,7 +110,6 @@ void tirabuixo(int dir) {
     val[1] = ((direccio_esquerra << 2) & 0x04) | ((velocitat_esquerra >> 8) & 0x03);
 
     //roda esquerra
-    //printf("\nPosa roda 1 a velocitat 50 i direcció 1\n");
     while (dyn_write(1, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 }
 
@@ -214,7 +211,6 @@ void moure_esquerra() {
 
     while (dyn_write(2, DYN_REG_MOV_SPEED_L, val, 2) != 0) {}
 
-    // Augmenta velocitat de la roda dreta (id 2)
     disminuir_velocitat(1);
 
 }

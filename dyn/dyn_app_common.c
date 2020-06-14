@@ -42,6 +42,11 @@ int dyn_led_read(uint8_t id, uint8_t *val) {
     return dyn_read_byte(id, DYN_REG__LED, val);
 }
 
+/**
+ * Llegeix els tres sensor de distància i utilitza com a fita superior la lectura més baixa.
+ * Rota sobre si mateix fins que troba una inferior o igual i va cap a aquesta.
+ * En cas que les tres lectures siguin 255, anirà cap endavant per defecte.
+ */
 void trobar_paret_propera() {
     uint8_t dreta, esquerra, davant;
     int dist;
@@ -56,7 +61,7 @@ void trobar_paret_propera() {
             // a més aprop, no només mirem les 3 direccions base
             tirabuixo(0);
             dist = 255;
-            while(esquerra + 5 < dist) {
+            while(esquerra + 8 < dist) {
                 dist = distancia_frontal();
             }
             parar();
@@ -64,7 +69,7 @@ void trobar_paret_propera() {
             tirabuixo(1);
             dist = 255;
             // El +5 és el marge d'error, donat que fet tirabuixó es pot moure alguna posició
-            while(dreta + 5 < dist) {
+            while(dreta + 8 < dist) {
                 dist = distancia_frontal();
             }
             parar();
@@ -73,45 +78,56 @@ void trobar_paret_propera() {
     // S'apropa cap a la paret
     moure_endavant();
     dist = 255;
-    while (dist > 20){
+    while (dist > 8){
         dist = distancia_frontal();
     }
 
     // Rota sobre sí mateix fins que s'ha encarat cap a la direcció que haurà de seguir desprès
     tirabuixo(1);
     dist = 255;
-    while (dist - 2 > 20) { // Gira fins que li queda la paret a l'esquerra
+    while (dist - 2 > 8) { // Gira fins que li queda la paret a l'esquerra
         dist = distancia_dreta();
     }
     return;
 }
 
+/**
+ * Resegueix la paret en sentit antihorari.
+ * Va endavant comprovant infinítament si té obtacles a certa distància a la dreta o davant.
+ * Definim els tres possibles escenaris que conformem tot.
+ */
 void resseguir_paret() {
     printf("\nHa entrat resseguir\n\n");
-    bool correcte = true, davant = false;
 
     moure_endavant();
 
-    while (correcte) {
-        //hem trobat un obstacle davant
-        if (distancia_frontal() < 10) {
+    while (1) {
+        // Hem trobat un obstacle davant
+        if (distancia_frontal() < 15) {
             obstacle_davant();
         }
-        if (distancia_dreta() < 5) {
+        // S'ha apropat massa a la paret
+        if (distancia_dreta() < 8) {
             corregir_esquerra();
         }
-        if (distancia_dreta() > 10) {
+        // S'ha allunyat massa de la paret
+        if (distancia_dreta() > 15) {
             corregir_dreta();
         }
     }
 }
 
+/**
+ * Es crida quan s'ha allunyat massa de la paret.
+ * Gira cap a la dreta fins a recuperar la distància límit.
+ * Mentrestant, es comprova constantment que durant aquesta operació no topi amb un obstacle al front,
+ * en aquest cas es crida a la funció pertinent.
+ */
 void corregir_dreta() {
     printf("\nHa entrat corregir_dreta\n\n");
     moure_dreta();
-    while (distancia_dreta() > 10) {
-        if (distancia_frontal() < 5) {
-            obstacle_davant();
+    while (distancia_dreta() > 15) {
+        if (distancia_frontal() < 8) {
             return;
         }
     }
@@ -119,12 +135,17 @@ void corregir_dreta() {
     return;
 }
 
+/**
+ * Es crida quan s'ha apropat massa a la paret.
+ * Gira cap a l'esquerra fins a recuperar la distància límit.
+ * Mentrestant, es comprova constantment que durant aquesta operació no topi amb un obstacle al front,
+ * en aquest cas es crida a la funció pertinent.
+ */
 void corregir_esquerra() {
     printf("\nHa entrat corregir_esq\n\n");
     moure_esquerra();
-    while (distancia_dreta() < 5) {
-        if (distancia_frontal() < 10) {
-            obstacle_davant();
+    while (distancia_dreta() < 8) {
+        if (distancia_frontal() < 15) {
             return;
         }
     }
@@ -132,25 +153,24 @@ void corregir_esquerra() {
     return;
 }
 
-/*
- * Funció que prén la desició de què fer quan el robot es troba un obstacle davant a menys de 20mm.
+/**
+ * Funció que prén la desició de què fer quan el robot es troba un obstacle davant a menys de 15mm.
  */
 void obstacle_davant() {
     printf("\nHa entrat obstacle davant\n\n");
-    if (distancia_esquerra() > 10) {
-        //gira fins que no hi ha obstacles davant a menys de 30 mm
+    if (distancia_esquerra() > 15) {
+        //gira fins que no hi ha obstacles davant a menys de 15 mm
         tirabuixo(1);
     }
-    else if (distancia_dreta() > 10) {
-        //gira fins que no hi ha obstacles davant a menys de 30 mm
+    else if (distancia_dreta() > 15) {
+        //gira fins que no hi ha obstacles davant a menys de 15 mm
         tirabuixo(0);
     }
     else {
-        //gira fins que no hi ha obstacles davant a menys de 30 mm
+        //gira fins que no hi ha obstacles davant a menys de 15 mm
         tirabuixo(1);
     }
-    while (distancia_frontal() < 10) {}
-    printf("\nHa sortit del while i ara va endavant\n\n");
+    while (distancia_frontal() < 15) {}
     moure_endavant();
     return;
 }
